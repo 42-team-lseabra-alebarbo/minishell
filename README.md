@@ -9,6 +9,8 @@ The shell reads and executes commands in an interactive loop, supporting a promp
 
 The bonus part adds support for `&&` and `||` logical operators with parenthesized grouping for priority, as well as wildcard (`*`) expansion in the current working directory.
 
+For the historical background, design decisions, and contribution notes, see [MINISHELL_PROJECT_STORY.md](MINISHELL_PROJECT_STORY.md).
+
 ## Instructions
 **Installation**
 * Run `make` on the root folder of the project to compile `minishell`.
@@ -111,3 +113,19 @@ Signal disposition is switched at two points in the main loop. While `readline()
 **AI Usage**
 
 AI was used to help write this README.
+
+## Contributors
+
+- **Lucca Cruz**: tokenization and command parsing, file-descriptor and redirection logic, execution flow, `execve()` orchestration, pipeline behavior, and the built-ins around `cd`, `pwd`, `export`, and `exit`, plus the parent/child builtin execution logic.
+- **Magusk Lutus**: variable expansion, quote stripping, wildcard expansion, `unset`, `env`, `echo`-related fixes, subshell lifecycle, exit-status propagation, and related signal / status fixes. The final built-in integration and cleanup were completed together near the end.
+
+The detailed project story and contribution notes are in [MINISHELL_PROJECT_STORY.md](MINISHELL_PROJECT_STORY.md).
+
+### Hardest bug fix
+
+The descriptor ownership bug was the hardest challenge in the execution layer. The fix is recorded in this commit: [0e732d2](https://github.com/42-team-lseabra-alebarbo/minishell/commit/0e732d2).
+
+## Profiles
+
+- **Lucca Cruz** — GitHub: [luccaseabracruz](https://github.com/luccaseabracruz) | LinkedIn: [luccaseabracruz](https://www.linkedin.com/in/luccaseabracruz/)
+- **Magusk Lutus** — GitHub: [magusk89](https://github.com/magusk89) | LinkedIn: [alex-bfs](https://www.linkedin.com/in/alex-bfs/)
