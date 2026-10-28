@@ -4,12 +4,12 @@
 
 Minishell started as a deceptively simple question: what does a shell actually do between the moment someone types a command and the moment a program runs? The answer turned out to involve much more than calling `execve()`. We had to build a small language processor, manage process lifetimes, route file descriptors, preserve shell state, and make the result behave consistently across ordinary commands, pipelines, redirections, signals, and grouped commands.
 
-The project was built collaboratively for the 42 curriculum. Its history records the work of Lucca Cruz and Magusk Lutus, with each contributing across the parser, expansion, execution, and cleanup layers. These areas were not isolated: the team had to align their contracts as features crossed from parsing into execution and from the parent shell into child processes.
+The project was built collaboratively for the 42 curriculum. Its history records the work of Lucca Cruz and Alex Silva, with each contributing across the parser, expansion, execution, and cleanup layers. These areas were not isolated: the team had to align their contracts as features crossed from parsing into execution and from the parent shell into child processes.
 
 ### Collaborators and Contributions
 
 - **Lucca Cruz** focused on tokenization and parsing: splitting the input into tokens, building the command/redirection structure, and handling the execution flow. He also implemented the file-descriptor and redirection logic, the surrounding `execve()` orchestration, pipeline behavior, and the core builtin work around `cd`, `pwd`, `export`, and `exit`, including the parent/child logic that determines when a builtin runs in the shell process or in a child.
-- **Magusk Lutus** handled the expansion and shell-language side of the project: variable expansion, quote stripping, wildcard expansion, `unset`, `env`, `echo`-related fixes, subshell lifecycle, exit-status propagation, and related signal and status fixes. The final built-in integration and cleanup were completed together near the end.
+- **Alex Silva** handled the expansion and shell-language side of the project: variable expansion, quote stripping, wildcard expansion, `unset`, `env`, `echo`-related fixes, subshell lifecycle, exit-status propagation, and related signal and status fixes. The final built-in integration and cleanup were completed together near the end.
 
 These are areas of substantial contribution visible in the repository history, not an exhaustive division of ownership. Features were integrated and debugged together.
 
