@@ -74,7 +74,7 @@ After variable expansion, `ft_wildcards()` scans the (still-unquoted) line for t
 
 **Parsing — `ft_parser.c`**
 
-`ft_parser()` walks the token array and builds the linked list of `t_cmd` nodes. For each command, `ft_init_cmd()` reads the operator token that opened this segment (e.g. `|`, `&&`), sets up a `pipe()` pair when the operator is a pipe, and then calls `ft_parse_cmd_tokens()` to consume argument tokens and redirection pairs. Redirections are stored as a linked list on the command node; heredoc targets are processed immediately by forking a process to read from the terminal until the delimiter line appears.
+`ft_parser()` walks the token array and builds the linked list of `t_cmd` nodes. For each command, `ft_init_cmd()` reads the operator token that opened this segment (e.g. `|`, `&&`), sets up a `pipe()` pair when the operator is a pipe, and then calls `ft_parse_cmd_tokens()` to consume argument tokens and redirection pairs. Redirections are stored as a linked list on the command node. When a heredoc is encountered, `ft_exec_heredoc()` reads lines from standard input until it reaches the delimiter, writes the body into a pipe, and stores the pipe's read end for use as the command's input. In the current implementation this read happens in the shell process, not in a forked process; SIGINT is detected through the shell's status and stops collection.
 
 **Quote removal — `ft_remove_quotes.c`**
 
