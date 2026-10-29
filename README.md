@@ -9,6 +9,8 @@ The shell reads and executes commands in an interactive loop, supporting a promp
 
 The bonus part adds support for `&&` and `||` logical operators with parenthesized grouping for priority, as well as wildcard (`*`) expansion in the current working directory.
 
+For the historical background, design decisions, and contribution notes, see [MINISHELL_PROJECT_STORY.md](MINISHELL_PROJECT_STORY.md).
+
 ## Instructions
 **Installation**
 * Run `make` on the root folder of the project to compile `minishell`.
@@ -74,7 +76,7 @@ After variable expansion, `ft_wildcards()` scans the (still-unquoted) line for t
 
 **Parsing — `ft_parser.c`**
 
-`ft_parser()` walks the token array and builds the linked list of `t_cmd` nodes. For each command, `ft_init_cmd()` reads the operator token that opened this segment (e.g. `|`, `&&`), sets up a `pipe()` pair when the operator is a pipe, and then calls `ft_parse_cmd_tokens()` to consume argument tokens and redirection pairs. Redirections are stored as a linked list on the command node; heredoc targets are processed immediately by forking a process to read from the terminal until the delimiter line appears.
+`ft_parser()` walks the token array and builds the linked list of `t_cmd` nodes. For each command, `ft_init_cmd()` reads the operator token that opened this segment (e.g. `|`, `&&`), sets up a `pipe()` pair when the operator is a pipe, and then calls `ft_parse_cmd_tokens()` to consume argument tokens and redirection pairs. Redirections are stored as a linked list on the command node. When a heredoc is encountered, `ft_exec_heredoc()` reads lines from standard input until it reaches the delimiter, writes the body into a pipe, and stores the pipe's read end for use as the command's input. In the current implementation this read happens in the shell process, not in a forked process; SIGINT is detected through the shell's status and stops collection.
 
 **Quote removal — `ft_remove_quotes.c`**
 
@@ -111,3 +113,19 @@ Signal disposition is switched at two points in the main loop. While `readline()
 **AI Usage**
 
 AI was used to help write this README.
+
+## Contributors
+
+- **Lucca Cruz**: tokenization and command parsing, file-descriptor and redirection logic, execution flow, `execve()` orchestration, pipeline behavior, and the built-ins around `cd`, `pwd`, `export`, and `exit`, plus the parent/child builtin execution logic.
+- **Alex Silva**: variable expansion, quote stripping, wildcard expansion, `unset`, `env`, `echo`-related fixes, subshell lifecycle, exit-status propagation, and related signal / status fixes. The final built-in integration and cleanup were completed together near the end.
+
+The detailed project story and contribution notes are in [MINISHELL_PROJECT_STORY.md](MINISHELL_PROJECT_STORY.md).
+
+### Hardest bug fix
+
+The descriptor ownership bug was the hardest challenge in the execution layer. The fix is recorded in this commit: [0e732d2](https://github.com/42-team-lseabra-alebarbo/minishell/commit/0e732d2).
+
+## Profiles
+
+- **Lucca Cruz** — GitHub: [luccaseabracruz](https://github.com/luccaseabracruz) | LinkedIn: [luccaseabracruz](https://www.linkedin.com/in/luccaseabracruz/)
+- **Alex Silva** — GitHub: [magusk89](https://github.com/magusk89) | LinkedIn: [alex-bfs](https://www.linkedin.com/in/alex-bfs/)
